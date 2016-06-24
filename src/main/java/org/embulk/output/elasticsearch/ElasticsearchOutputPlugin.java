@@ -80,6 +80,10 @@ public class ElasticsearchOutputPlugin
         @ConfigDefault("null")
         public Optional<String> getId();
 
+        @Config("drop_id_column")
+        @ConfigDefault("false")
+        public Boolean getDropIdColumn();
+
         @Config("bulk_actions")
         @ConfigDefault("1000")
         public int getBulkActions();
@@ -89,7 +93,7 @@ public class ElasticsearchOutputPlugin
         public long getBulkSize();
 
         @Config("concurrent_requests")
-        @ConfigDefault("5")
+        @ConfigDefault("3")
         public int getConcurrentRequests();
     }
 
@@ -218,6 +222,7 @@ public class ElasticsearchOutputPlugin
         private final String index;
         private final String type;
         private final String id;
+        private final Boolean dropIdColumn;
 
         public ElasticsearchPageOutput(PluginTask task, Client client, BulkProcessor bulkProcessor)
         {
@@ -229,6 +234,7 @@ public class ElasticsearchOutputPlugin
             this.index = task.getIndex();
             this.type = task.getType();
             this.id = task.getId().orNull();
+            this.dropIdColumn = task.getDropIdColumn();
         }
 
         void open(final Schema schema)
@@ -249,6 +255,7 @@ public class ElasticsearchOutputPlugin
                         @Override
                         public void booleanColumn(Column column) {
                             try {
+                                if (dropIdColumn == true && column.getName().equals(id)) return;
                                 if (pageReader.isNull(column)) {
                                     contextBuilder.nullField(column.getName());
                                 } else {
@@ -266,6 +273,7 @@ public class ElasticsearchOutputPlugin
                         @Override
                         public void longColumn(Column column) {
                             try {
+                                if (dropIdColumn == true && column.getName().equals(id)) return;
                                 if (pageReader.isNull(column)) {
                                     contextBuilder.nullField(column.getName());
                                 } else {
@@ -283,6 +291,7 @@ public class ElasticsearchOutputPlugin
                         @Override
                         public void doubleColumn(Column column) {
                             try {
+                                if (dropIdColumn == true && column.getName().equals(id)) return;
                                 if (pageReader.isNull(column)) {
                                     contextBuilder.nullField(column.getName());
                                 } else {
@@ -300,6 +309,7 @@ public class ElasticsearchOutputPlugin
                         @Override
                         public void stringColumn(Column column) {
                             try {
+                                if (dropIdColumn == true && column.getName().equals(id)) return;
                                 if (pageReader.isNull(column)) {
                                     contextBuilder.nullField(column.getName());
                                 } else {
@@ -317,6 +327,7 @@ public class ElasticsearchOutputPlugin
                         @Override
                         public void jsonColumn(Column column) {
                             try {
+                                if (dropIdColumn == true && column.getName().equals(id)) return;
                                 if (pageReader.isNull(column)) {
                                     contextBuilder.nullField(column.getName());
                                 } else {
@@ -334,6 +345,7 @@ public class ElasticsearchOutputPlugin
                         @Override
                         public void timestampColumn(Column column) {
                             try {
+                                if (dropIdColumn == true && column.getName().equals(id)) return;
                                 if (pageReader.isNull(column)) {
                                     contextBuilder.nullField(column.getName());
                                 } else {
