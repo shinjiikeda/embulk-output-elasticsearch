@@ -49,12 +49,12 @@ task gemspec << { file("build/gemspec").write($/
 Gem::Specification.new do |spec|
   spec.name          = "${project.name}"
   spec.version       = "${project.version}"
-  spec.authors       = ["Muga Nishizawa"]
-  spec.summary       = %[Elasticsearch output plugin for Embulk]
-  spec.description   = %[Elasticsearch output plugin is an Embulk plugin that loads records to Elasticsearch read by any input plugins. Search the input plugins by "embulk-input" keyword.]
-  spec.email         = ["muga.nishizawa@gmail.com"]
+  spec.authors       = ["Muga Nishizawa", "Shinji Ikeda"]
+  spec.summary       = %[Elasticsearch 1.x output plugin for Embulk]
+  spec.description   = %[Elasticsearch 1.x output plugin is an Embulk plugin that loads records to Elasticsearch read by any input plugins. Search the input plugins by "embulk-input" keyword.]
+  spec.email         = ["muga.nishizawa@gmail.com", "gm.ikeda@gmail.com"]
   spec.licenses      = ["Apache 2.0"]
-  spec.homepage      = "https://github.com/muga/embulk-output-elasticsearch"
+  spec.homepage      = "https://github.com/shinjiikeda/embulk-output-elasticsearch"
 
   spec.files         = `git ls-files`.split("\n") + Dir["classpath/*.jar"]
   spec.test_files    = spec.files.grep(%r"^(test|spec)/")
